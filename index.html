@@ -19,8 +19,12 @@
   --card: #fff9fb;
 }
 
-body {
+html, body {
   margin: 0;
+  min-height: 100%;
+}
+
+body {
   min-height: 100vh;
   color: var(--text);
   font-family: "Comic Sans MS", "Segoe UI", sans-serif;
@@ -79,7 +83,7 @@ body {
   justify-content: center;
 }
 
-/* LP */
+/* CD */
 
 .disc-wrap {
   width: min(420px, 78vw);
@@ -138,8 +142,12 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
+
+/* song */
 
 .song-info {
   text-align: center;
@@ -292,7 +300,7 @@ input[type="range"] {
   color: var(--sub);
 }
 
-/* hidden youtube player */
+/* YouTube player */
 
 #ytPlayer {
   position: fixed;
@@ -479,7 +487,7 @@ const tracks = [
 ];
 
 let current = 1;
-let player;
+let player = null;
 let ready = false;
 let progressTimer = null;
 
@@ -528,13 +536,16 @@ function updateInfo() {
 
 function loadTrack(index, autoplay = false) {
   current = (index + tracks.length) % tracks.length;
+
   updateInfo();
 
   progress.value = 0;
   currentTimeEl.textContent = "0:00";
   durationEl.textContent = "0:00";
 
-  if (!ready || !player) return;
+  if (!ready || !player) {
+    return;
+  }
 
   if (autoplay) {
     player.loadVideoById(tracks[current].ytId);
@@ -544,16 +555,24 @@ function loadTrack(index, autoplay = false) {
 }
 
 function formatTime(seconds) {
-  if (!Number.isFinite(seconds)) return "0:00";
+  if (!Number.isFinite(seconds)) {
+    return "0:00";
+  }
 
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
 
-  return `${m}:${String(s).padStart(2, "0")}`;
+  return `${minutes}:${String(secs).padStart(2, "0")}`;
 }
 
 function updateProgress() {
-  if (!ready || !player || typeof player.getDuration !== "function") return;
+  if (!ready || !player) {
+    return;
+  }
+
+  if (typeof player.getDuration !== "function") {
+    return;
+  }
 
   const duration = player.getDuration() || 0;
   const time = player.getCurrentTime() || 0;
@@ -571,7 +590,7 @@ function startProgressTimer() {
   progressTimer = setInterval(updateProgress, 500);
 }
 
-function onYouTubeIframeAPIReady() {
+window.onYouTubeIframeAPIReady = function () {
   player = new YT.Player("ytPlayer", {
     height: "1",
     width: "1",
@@ -584,14 +603,14 @@ function onYouTubeIframeAPIReady() {
     },
 
     events: {
-      onReady: (event) => {
+      onReady: function (event) {
         ready = true;
         event.target.setVolume(70);
         updateInfo();
         startProgressTimer();
       },
 
-      onStateChange: (event) => {
+      onStateChange: function (event) {
         if (event.data === YT.PlayerState.PLAYING) {
           playButton.textContent = "❚❚";
           disc.classList.add("playing");
@@ -605,16 +624,18 @@ function onYouTubeIframeAPIReady() {
         }
       },
 
-      onError: () => {
+      onError: function () {
         playButton.textContent = "▶";
         disc.classList.remove("playing");
       }
     }
   });
-}
+};
 
-playButton.onclick = () => {
-  if (!ready) return;
+playButton.onclick = function () {
+  if (!ready || !player) {
+    return;
+  }
 
   const state = player.getPlayerState();
 
@@ -625,32 +646,39 @@ playButton.onclick = () => {
   }
 };
 
-document.getElementById("prev").onclick = () => {
+document.getElementById("prev").onclick = function () {
   loadTrack(current - 1, true);
 };
 
-document.getElementById("next").onclick = () => {
+document.getElementById("next").onclick = function () {
   loadTrack(current + 1, true);
 };
 
-document.getElementById("volume").oninput = (event) => {
-  if (ready) {
+document.getElementById("volume").oninput = function (event) {
+  if (ready && player) {
     player.setVolume(Number(event.target.value));
   }
 };
 
-progress.oninput = (event) => {
-  if (!ready) return;
+progress.oninput = function (event) {
+  if (!ready || !player) {
+    return;
+  }
 
   const duration = player.getDuration();
 
   if (duration > 0) {
-    player.seekTo(duration * (Number(event.target.value) / 100), true);
+    player.seekTo(
+      duration * (Number(event.target.value) / 100),
+      true
+    );
   }
 };
 
+/* 화면 먼저 표시 */
 updateInfo();
 
+/* YouTube API 불러오기 */
 const youtubeScript = document.createElement("script");
 youtubeScript.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(youtubeScript);
