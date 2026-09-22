@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUKI Playlist</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #fff5f7, #efffff);
+      font-family: sans-serif;
+      color: #493c42;
+    }
+
+    .box {
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #8d7b82;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h1>SUKI Playlist ♡</h1>
+    <p>플레이리스트를 불러오는 중...</p>
+  </div>
+
+  <script>
+    const playlist = {
+      "plName": "SUKI Playlist",
+      "plSub": "~절찬리 추가중~",
+      "c1": "#f5adb8",
+      "c2": "#bcfbfa",
+      "font": "박다현체",
+      "dark": false,
+      "recLen": 60,
+      "tracks": [
+        {
+          "id": "t1790042144501j2lf",
+          "name": "Pale Blue",
+          "artist": "Kenshi Yonezu",
+          "type": "youtube",
+          "ytId": "PIZFPmz_tD8",
+          "cover": "https://i.pinimg.com/736x/32/04/94/32049423111eff0b3cb4f0aa14c4f555.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790052248435rp3a",
+          "name": "orion",
+          "artist": "kenshi Yonezu",
+          "type": "youtube",
+          "ytId": "dqdDCInb1hM",
+          "cover": "https://i.pinimg.com/736x/d7/b3/9d/d7b39d3ee857225d529dcce731be3d94.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790043988331xts6",
+          "name": "Mela!",
+          "artist": "Ryoku Shaka",
+          "type": "youtube",
+          "ytId": "m-x5Hq6k6d8",
+          "cover": "https://i.pinimg.com/736x/55/75/f1/5575f1eb320cdb45d910cb888571cd5f.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790050893578frd0",
+          "name": "Lady",
+          "artist": "Kenshi Yonezu",
+          "type": "youtube",
+          "ytId": "4fSfCfa7gtQ",
+          "cover": "https://i.pinimg.com/736x/20/fe/9d/20fe9d508e77b39d08bf88fe7306f2da.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790047361473homs",
+          "name": "ヒロインRE♡クエスト",
+          "artist": "Feat. Kasane Teto, Adachi Rei",
+          "type": "youtube",
+          "ytId": "VXA0PEjkIGU",
+          "cover": "https://i.pinimg.com/736x/8f/56/96/8f5696d5f03bdfebd5e2bf0b3a865562.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t17900486180351pjh",
+          "name": "Kimini 100 Percent",
+          "artist": "kyari pamyu pamyu",
+          "type": "youtube",
+          "ytId": "nSCqFvQesb0",
+          "cover": "https://i.pinimg.com/736x/da/6a/6e/da6a6eda6c75ba19d4a54a7ecd6e11b8.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790042916498f9t4",
+          "name": "最大公約数",
+          "artist": "RADWIMPS",
+          "type": "youtube",
+          "ytId": "kpH9hj2sTl4",
+          "cover": "https://i.pinimg.com/736x/9b/b7/b2/9bb7b2c3b4c2151b343ebe8814eb8630.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t17900448309083vvc",
+          "name": "눈 맞추고, 손 맞대고",
+          "artist": "Red Velvet",
+          "type": "youtube",
+          "ytId": "Wn9MFo6tzJc",
+          "cover": "https://i.pinimg.com/1200x/64/7f/41/647f41fe7c51c8b5e7c8f56e1c76327e.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790048043005bk2s",
+          "name": "동거",
+          "artist": "선우정아",
+          "type": "youtube",
+          "ytId": "cl9_Nl2bbgA",
+          "cover": "https://i.pinimg.com/1200x/b8/b0/fd/b8b0fde66f0dab4d9a5ed791fefd1f76.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790048511478e0c7",
+          "name": "Beyond My Dreams",
+          "artist": "선우정아",
+          "type": "youtube",
+          "ytId": "q9Os0o3QGS8",
+          "cover": "https://i.pinimg.com/1200x/05/84/3d/05843d4912676bb96d4b0660c6524595.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790049617602ojrg",
+          "name": "행운을 빌어요",
+          "artist": "PEPPERTONES",
+          "type": "youtube",
+          "ytId": "zNqZxntN7n8",
+          "cover": "https://i.pinimg.com/736x/ff/76/51/ff76513560a93f10b488a316db2e6550.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790042561490tmoi",
+          "name": "Walking with you",
+          "artist": "Novelbright",
+          "type": "youtube",
+          "ytId": "obW4xWXKZjw",
+          "cover": "https://i.pinimg.com/1200x/e3/a7/fa/e3a7fa1d84a707ce33445cacacc4508c.jpg",
+          "coverKey": false
+        },
+        {
+          "id": "t1790053457871vrba",
+          "name": "Starry Drama",
+          "artist": "Ryoku Shaka",
+          "type": "youtube",
+          "ytId": "n3W-CiadkZc",
+          "cover": "https://i.pinimg.com/1200x/67/62/29/676229f3e356bcd459b09dc74c88e3ef.jpg",
+          "coverKey": false
+        }
+      ],
+      "current": 1
+    };
+
+    localStorage.setItem("canopener_v3", JSON.stringify(playlist));
+
+    window.location.replace("https://dearlovedive.github.io/playlist/");
+  </script>
+</body>
+</html>
