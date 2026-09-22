@@ -1,176 +1,660 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SUKI Playlist</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #fff5f7, #efffff);
-      font-family: sans-serif;
-      color: #493c42;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUKI Playlist</title>
 
-    .box {
-      text-align: center;
-      padding: 40px;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    h1 {
-      margin-bottom: 8px;
-    }
+:root {
+  --pink: #f5adb8;
+  --mint: #bcfbfa;
+  --text: #493c42;
+  --sub: #aa929c;
+  --paper: rgba(255,255,255,.88);
+  --card: #fff9fb;
+}
 
-    p {
-      color: #8d7b82;
-    }
-  </style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: "Comic Sans MS", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(245,173,184,.22), transparent 28%),
+    radial-gradient(circle at 90% 80%, rgba(188,251,250,.25), transparent 30%),
+    linear-gradient(135deg, #fff6f9, #ffffff);
+}
+
+.page {
+  width: min(1250px, 94%);
+  margin: 35px auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: 1px;
+}
+
+.header p {
+  margin: 7px 0 0;
+  color: var(--sub);
+  font-size: 14px;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 24px;
+  padding: 25px;
+  border-radius: 38px;
+  background: rgba(255,255,255,.58);
+  border: 1px solid rgba(245,173,184,.25);
+  box-shadow: 0 18px 55px rgba(95,68,78,.12);
+}
+
+.player,
+.list-panel {
+  background: var(--paper);
+  border-radius: 30px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(82,59,68,.08);
+}
+
+.player {
+  min-height: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* LP */
+
+.disc-wrap {
+  width: min(420px, 78vw);
+  aspect-ratio: 1;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.disc {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  padding: 24px;
+  background:
+    repeating-radial-gradient(
+      circle,
+      rgba(70,55,65,.11) 0 2px,
+      transparent 2px 5px
+    ),
+    conic-gradient(
+      var(--pink),
+      #f8d4dc,
+      var(--mint),
+      #e9ffff,
+      var(--pink)
+    );
+  box-shadow: 0 15px 28px rgba(75,58,66,.22);
+  animation: spin 14s linear infinite;
+  animation-play-state: paused;
+}
+
+.disc.playing {
+  animation-play-state: running;
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 9px solid rgba(255,255,255,.9);
+}
+
+.hole {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  box-shadow:
+    inset 0 0 0 4px rgba(245,173,184,.15),
+    0 2px 8px rgba(0,0,0,.12);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.song-info {
+  text-align: center;
+}
+
+.song-info h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.song-info p {
+  margin: 7px 0 0;
+  color: var(--sub);
+}
+
+/* progress */
+
+.progress-row {
+  width: 88%;
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 27px;
+  font-size: 12px;
+  color: #8f7b84;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--pink);
+}
+
+/* controls */
+
+.controls {
+  display: flex;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.control {
+  border: 0;
+  background: white;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 22px;
+  box-shadow: 0 8px 18px rgba(94,68,78,.10);
+  transition: .2s;
+}
+
+.control:hover {
+  transform: translateY(-3px);
+}
+
+.control.play {
+  width: 78px;
+  height: 78px;
+  color: white;
+  font-size: 28px;
+  background: linear-gradient(135deg, var(--pink), var(--mint));
+}
+
+/* volume */
+
+.volume {
+  width: 75%;
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* playlist */
+
+.list-panel {
+  height: 650px;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-panel h3 {
+  margin: 0 0 18px 4px;
+  font-size: 20px;
+}
+
+.track-list {
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.track-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.track-list::-webkit-scrollbar-thumb {
+  background: var(--pink);
+  border-radius: 20px;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 15px;
+  margin-bottom: 13px;
+  border-radius: 24px;
+  background: var(--card);
+  border: 1.5px solid #f8d5de;
+  cursor: pointer;
+  transition: .2s;
+  box-shadow: 0 5px 12px rgba(98,72,80,.05);
+}
+
+.track:hover {
+  transform: translateY(-2px);
+  border-color: var(--pink);
+}
+
+.track.active {
+  border-color: var(--pink);
+  background: #fff2f6;
+  box-shadow: 0 7px 18px rgba(245,173,184,.18);
+}
+
+.track img {
+  width: 82px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.track-text {
+  min-width: 0;
+}
+
+.track-name {
+  font-size: 16px;
+  font-weight: 700;
+  word-break: keep-all;
+}
+
+.track-artist {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--sub);
+}
+
+/* hidden youtube player */
+
+#ytPlayer {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  left: -9999px;
+  top: -9999px;
+}
+
+/* mobile */
+
+@media (max-width: 850px) {
+  .page {
+    margin: 18px auto;
+    width: 95%;
+  }
+
+  .shell {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    border-radius: 25px;
+  }
+
+  .player,
+  .list-panel {
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  .player {
+    min-height: auto;
+  }
+
+  .list-panel {
+    height: 600px;
+  }
+
+  .disc-wrap {
+    width: min(330px, 80vw);
+  }
+
+  .track img {
+    width: 68px;
+    height: 68px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="box">
-    <h1>SUKI Playlist ♡</h1>
-    <p>플레이리스트를 불러오는 중...</p>
-  </div>
 
-  <script>
-    const playlist = {
-      "plName": "SUKI Playlist",
-      "plSub": "~절찬리 추가중~",
-      "c1": "#f5adb8",
-      "c2": "#bcfbfa",
-      "font": "박다현체",
-      "dark": false,
-      "recLen": 60,
-      "tracks": [
-        {
-          "id": "t1790042144501j2lf",
-          "name": "Pale Blue",
-          "artist": "Kenshi Yonezu",
-          "type": "youtube",
-          "ytId": "PIZFPmz_tD8",
-          "cover": "https://i.pinimg.com/736x/32/04/94/32049423111eff0b3cb4f0aa14c4f555.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790052248435rp3a",
-          "name": "orion",
-          "artist": "kenshi Yonezu",
-          "type": "youtube",
-          "ytId": "dqdDCInb1hM",
-          "cover": "https://i.pinimg.com/736x/d7/b3/9d/d7b39d3ee857225d529dcce731be3d94.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790043988331xts6",
-          "name": "Mela!",
-          "artist": "Ryoku Shaka",
-          "type": "youtube",
-          "ytId": "m-x5Hq6k6d8",
-          "cover": "https://i.pinimg.com/736x/55/75/f1/5575f1eb320cdb45d910cb888571cd5f.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790050893578frd0",
-          "name": "Lady",
-          "artist": "Kenshi Yonezu",
-          "type": "youtube",
-          "ytId": "4fSfCfa7gtQ",
-          "cover": "https://i.pinimg.com/736x/20/fe/9d/20fe9d508e77b39d08bf88fe7306f2da.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790047361473homs",
-          "name": "ヒロインRE♡クエスト",
-          "artist": "Feat. Kasane Teto, Adachi Rei",
-          "type": "youtube",
-          "ytId": "VXA0PEjkIGU",
-          "cover": "https://i.pinimg.com/736x/8f/56/96/8f5696d5f03bdfebd5e2bf0b3a865562.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t17900486180351pjh",
-          "name": "Kimini 100 Percent",
-          "artist": "kyari pamyu pamyu",
-          "type": "youtube",
-          "ytId": "nSCqFvQesb0",
-          "cover": "https://i.pinimg.com/736x/da/6a/6e/da6a6eda6c75ba19d4a54a7ecd6e11b8.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790042916498f9t4",
-          "name": "最大公約数",
-          "artist": "RADWIMPS",
-          "type": "youtube",
-          "ytId": "kpH9hj2sTl4",
-          "cover": "https://i.pinimg.com/736x/9b/b7/b2/9bb7b2c3b4c2151b343ebe8814eb8630.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t17900448309083vvc",
-          "name": "눈 맞추고, 손 맞대고",
-          "artist": "Red Velvet",
-          "type": "youtube",
-          "ytId": "Wn9MFo6tzJc",
-          "cover": "https://i.pinimg.com/1200x/64/7f/41/647f41fe7c51c8b5e7c8f56e1c76327e.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790048043005bk2s",
-          "name": "동거",
-          "artist": "선우정아",
-          "type": "youtube",
-          "ytId": "cl9_Nl2bbgA",
-          "cover": "https://i.pinimg.com/1200x/b8/b0/fd/b8b0fde66f0dab4d9a5ed791fefd1f76.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790048511478e0c7",
-          "name": "Beyond My Dreams",
-          "artist": "선우정아",
-          "type": "youtube",
-          "ytId": "q9Os0o3QGS8",
-          "cover": "https://i.pinimg.com/1200x/05/84/3d/05843d4912676bb96d4b0660c6524595.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790049617602ojrg",
-          "name": "행운을 빌어요",
-          "artist": "PEPPERTONES",
-          "type": "youtube",
-          "ytId": "zNqZxntN7n8",
-          "cover": "https://i.pinimg.com/736x/ff/76/51/ff76513560a93f10b488a316db2e6550.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790042561490tmoi",
-          "name": "Walking with you",
-          "artist": "Novelbright",
-          "type": "youtube",
-          "ytId": "obW4xWXKZjw",
-          "cover": "https://i.pinimg.com/1200x/e3/a7/fa/e3a7fa1d84a707ce33445cacacc4508c.jpg",
-          "coverKey": false
-        },
-        {
-          "id": "t1790053457871vrba",
-          "name": "Starry Drama",
-          "artist": "Ryoku Shaka",
-          "type": "youtube",
-          "ytId": "n3W-CiadkZc",
-          "cover": "https://i.pinimg.com/1200x/67/62/29/676229f3e356bcd459b09dc74c88e3ef.jpg",
-          "coverKey": false
-        }
-      ],
-      "current": 1
+<div class="page">
+
+  <header class="header">
+    <h1>SUKI Playlist</h1>
+    <p>~절찬리 추가중~</p>
+  </header>
+
+  <main class="shell">
+
+    <section class="player">
+
+      <div class="disc-wrap">
+        <div class="disc" id="disc">
+          <img class="cover" id="mainCover" alt="album cover">
+        </div>
+        <div class="hole"></div>
+      </div>
+
+      <div class="song-info">
+        <h2 id="songName"></h2>
+        <p id="songArtist"></p>
+      </div>
+
+      <div class="progress-row">
+        <span id="currentTime">0:00</span>
+        <input id="progress" type="range" min="0" max="100" value="0">
+        <span id="duration">0:00</span>
+      </div>
+
+      <div class="controls">
+        <button class="control" id="prev">◀◀</button>
+        <button class="control play" id="play">▶</button>
+        <button class="control" id="next">▶▶</button>
+      </div>
+
+      <div class="volume">
+        <span>🔈</span>
+        <input id="volume" type="range" min="0" max="100" value="70">
+      </div>
+
+    </section>
+
+    <section class="list-panel">
+      <h3>곡 목록</h3>
+      <div class="track-list" id="trackList"></div>
+    </section>
+
+  </main>
+</div>
+
+<div id="ytPlayer"></div>
+
+<script>
+const tracks = [
+  {
+    name: "Pale Blue",
+    artist: "Kenshi Yonezu",
+    ytId: "PIZFPmz_tD8",
+    cover: "https://i.pinimg.com/736x/32/04/94/32049423111eff0b3cb4f0aa14c4f555.jpg"
+  },
+  {
+    name: "orion",
+    artist: "Kenshi Yonezu",
+    ytId: "dqdDCInb1hM",
+    cover: "https://i.pinimg.com/736x/d7/b3/9d/d7b39d3ee857225d529dcce731be3d94.jpg"
+  },
+  {
+    name: "Mela!",
+    artist: "Ryoku Shaka",
+    ytId: "m-x5Hq6k6d8",
+    cover: "https://i.pinimg.com/736x/55/75/f1/5575f1eb320cdb45d910cb888571cd5f.jpg"
+  },
+  {
+    name: "Lady",
+    artist: "Kenshi Yonezu",
+    ytId: "4fSfCfa7gtQ",
+    cover: "https://i.pinimg.com/736x/20/fe/9d/20fe9d508e77b39d08bf88fe7306f2da.jpg"
+  },
+  {
+    name: "ヒロインRE♡クエスト",
+    artist: "Feat. Kasane Teto, Adachi Rei",
+    ytId: "VXA0PEjkIGU",
+    cover: "https://i.pinimg.com/736x/8f/56/96/8f5696d5f03bdfebd5e2bf0b3a865562.jpg"
+  },
+  {
+    name: "Kimini 100 Percent",
+    artist: "Kyary Pamyu Pamyu",
+    ytId: "nSCqFvQesb0",
+    cover: "https://i.pinimg.com/736x/da/6a/6e/da6a6eda6c75ba19d4a54a7ecd6e11b8.jpg"
+  },
+  {
+    name: "最大公約数",
+    artist: "RADWIMPS",
+    ytId: "kpH9hj2sTl4",
+    cover: "https://i.pinimg.com/736x/9b/b7/b2/9bb7b2c3b4c2151b343ebe8814eb8630.jpg"
+  },
+  {
+    name: "눈 맞추고, 손 맞대고",
+    artist: "Red Velvet",
+    ytId: "Wn9MFo6tzJc",
+    cover: "https://i.pinimg.com/1200x/64/7f/41/647f41fe7c51c8b5e7c8f56e1c76327e.jpg"
+  },
+  {
+    name: "동거",
+    artist: "선우정아",
+    ytId: "cl9_Nl2bbgA",
+    cover: "https://i.pinimg.com/1200x/b8/b0/fd/b8b0fde66f0dab4d9a5ed791fefd1f76.jpg"
+  },
+  {
+    name: "Beyond My Dreams",
+    artist: "선우정아",
+    ytId: "q9Os0o3QGS8",
+    cover: "https://i.pinimg.com/1200x/05/84/3d/05843d4912676bb96d4b0660c6524595.jpg"
+  },
+  {
+    name: "행운을 빌어요",
+    artist: "PEPPERTONES",
+    ytId: "zNqZxntN7n8",
+    cover: "https://i.pinimg.com/736x/ff/76/51/ff76513560a93f10b488a316db2e6550.jpg"
+  },
+  {
+    name: "Walking with you",
+    artist: "Novelbright",
+    ytId: "obW4xWXKZjw",
+    cover: "https://i.pinimg.com/1200x/e3/a7/fa/e3a7fa1d84a707ce33445cacacc4508c.jpg"
+  },
+  {
+    name: "Starry Drama",
+    artist: "Ryoku Shaka",
+    ytId: "n3W-CiadkZc",
+    cover: "https://i.pinimg.com/1200x/67/62/29/676229f3e356bcd459b09dc74c88e3ef.jpg"
+  }
+];
+
+let current = 1;
+let player;
+let ready = false;
+let progressTimer = null;
+
+const list = document.getElementById("trackList");
+const mainCover = document.getElementById("mainCover");
+const songName = document.getElementById("songName");
+const songArtist = document.getElementById("songArtist");
+const disc = document.getElementById("disc");
+const playButton = document.getElementById("play");
+const progress = document.getElementById("progress");
+const currentTimeEl = document.getElementById("currentTime");
+const durationEl = document.getElementById("duration");
+
+function renderList() {
+  list.innerHTML = "";
+
+  tracks.forEach((track, index) => {
+    const card = document.createElement("div");
+    card.className = "track" + (index === current ? " active" : "");
+
+    card.innerHTML = `
+      <img src="${track.cover}" alt="">
+      <div class="track-text">
+        <div class="track-name">${track.name}</div>
+        <div class="track-artist">${track.artist}</div>
+      </div>
+    `;
+
+    card.onclick = () => {
+      loadTrack(index, true);
     };
 
-    localStorage.setItem("canopener_v3", JSON.stringify(playlist));
+    list.appendChild(card);
+  });
+}
 
-    window.location.replace("https://dearlovedive.github.io/playlist/");
-  </script>
+function updateInfo() {
+  const track = tracks[current];
+
+  mainCover.src = track.cover;
+  songName.textContent = track.name;
+  songArtist.textContent = track.artist;
+
+  renderList();
+}
+
+function loadTrack(index, autoplay = false) {
+  current = (index + tracks.length) % tracks.length;
+  updateInfo();
+
+  progress.value = 0;
+  currentTimeEl.textContent = "0:00";
+  durationEl.textContent = "0:00";
+
+  if (!ready || !player) return;
+
+  if (autoplay) {
+    player.loadVideoById(tracks[current].ytId);
+  } else {
+    player.cueVideoById(tracks[current].ytId);
+  }
+}
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function updateProgress() {
+  if (!ready || !player || typeof player.getDuration !== "function") return;
+
+  const duration = player.getDuration() || 0;
+  const time = player.getCurrentTime() || 0;
+
+  if (duration > 0) {
+    progress.value = (time / duration) * 100;
+  }
+
+  currentTimeEl.textContent = formatTime(time);
+  durationEl.textContent = formatTime(duration);
+}
+
+function startProgressTimer() {
+  clearInterval(progressTimer);
+  progressTimer = setInterval(updateProgress, 500);
+}
+
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player("ytPlayer", {
+    height: "1",
+    width: "1",
+    videoId: tracks[current].ytId,
+
+    playerVars: {
+      playsinline: 1,
+      controls: 0,
+      rel: 0
+    },
+
+    events: {
+      onReady: (event) => {
+        ready = true;
+        event.target.setVolume(70);
+        updateInfo();
+        startProgressTimer();
+      },
+
+      onStateChange: (event) => {
+        if (event.data === YT.PlayerState.PLAYING) {
+          playButton.textContent = "❚❚";
+          disc.classList.add("playing");
+        } else {
+          playButton.textContent = "▶";
+          disc.classList.remove("playing");
+        }
+
+        if (event.data === YT.PlayerState.ENDED) {
+          loadTrack(current + 1, true);
+        }
+      },
+
+      onError: () => {
+        playButton.textContent = "▶";
+        disc.classList.remove("playing");
+      }
+    }
+  });
+}
+
+playButton.onclick = () => {
+  if (!ready) return;
+
+  const state = player.getPlayerState();
+
+  if (state === YT.PlayerState.PLAYING) {
+    player.pauseVideo();
+  } else {
+    player.playVideo();
+  }
+};
+
+document.getElementById("prev").onclick = () => {
+  loadTrack(current - 1, true);
+};
+
+document.getElementById("next").onclick = () => {
+  loadTrack(current + 1, true);
+};
+
+document.getElementById("volume").oninput = (event) => {
+  if (ready) {
+    player.setVolume(Number(event.target.value));
+  }
+};
+
+progress.oninput = (event) => {
+  if (!ready) return;
+
+  const duration = player.getDuration();
+
+  if (duration > 0) {
+    player.seekTo(duration * (Number(event.target.value) / 100), true);
+  }
+};
+
+updateInfo();
+
+const youtubeScript = document.createElement("script");
+youtubeScript.src = "https://www.youtube.com/iframe_api";
+document.head.appendChild(youtubeScript);
+</script>
+
 </body>
 </html>
